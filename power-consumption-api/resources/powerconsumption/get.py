@@ -18,10 +18,12 @@ class PowerConsumptionResource(Resource):
                 return {"message": "Invalid Parameter."}, 400
             start_time_str = start_time_str.strip() if start_time_str else ""
             end_time_str = end_time_str.strip() if end_time_str else ""
-            if not start_time_str or not end_time_str:
-                return {"message": "Invalid start time or end time format."}, 400
-            start_time = datetime.fromisoformat(start_time_str)
-            end_time = datetime.fromisoformat(end_time_str)
+            if ":" in start_time_str and ":" in end_time_str:
+                start_time = datetime.fromisoformat(start_time_str)
+                end_time = datetime.fromisoformat(end_time_str)
+            else:
+                start_time = datetime.utcfromtimestamp(int(start_time_str))
+                end_time = datetime.utcfromtimestamp(int(end_time_str))
 
             # searching in db for data on filter query
             result = list(Table.objects.exclude('id')(ts__gte=start_time,ts__lte= end_time).as_pymongo())
