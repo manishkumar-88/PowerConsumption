@@ -11,7 +11,7 @@ class PowerConsumptionResource(Resource):
         try:
             start_time_str = request.args.get('startTime')
             end_time_str = request.args.get('endTime')
-            value = request.args.get('value',type=float)
+            value = request.args.get('value',type=float,default=0)
 
             # formatting start and end time for filter query
             if start_time_str is None or end_time_str is None or value is None:
